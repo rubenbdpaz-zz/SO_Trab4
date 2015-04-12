@@ -1,4 +1,4 @@
-/*
+/*ltame/*
   Class Thread e a classe base que devera ser herdada por outras classes
   c++ dicas: se em uma classe existir pelo menos um metodo virtual puro
   a classe sera considerada abstrata e dessa forma nao podera ser instan-

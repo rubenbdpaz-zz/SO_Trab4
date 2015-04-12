@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QList>
-
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,13 +13,24 @@ MainWindow::MainWindow(QWidget *parent) :
   QStringList headers;
   headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
   model->setHorizontalHeaderLabels(headers);
-
+  //PEGAR INFORMAÇÕES DA PASTA PROC
+  //CONTADOR DE QUANTAS PASTAS COM NUMERO TEM
+  //FOR ATE ESSE NUMERO DE PASTAS
+  //ENTRAR EM CADA PASTA, PEGAR AS INFORMAÇÕES DO STATUS E ENVIAR PRO LISTAITEM
 
 // model->setHorizontalHeaderItem( 0, new QStandardItem( "Nome" ) );
 // model->setHorizontalHeaderItem( 1, new QStandardItem( "Status" ) );
  // model->setHorizontalHeaderItem( 2, new QStandardItem( "PID" ) );
 
+    /* PEGAR LISTA DE PROCESSOS NA PASTA DIR
+    QDir proc("/proc");
+    QStringList filters;
+    filters << " ";
+    proc.setNameFilters(filters);
+    proc.setFilter(QDir::Dirs);
 
+    QStringList dirList = proc.entryList();
+    */
     QList<QStandardItem *> listaItem;
     listaItem << new QStandardItem("firefox");
     listaItem << new QStandardItem("Parado");
