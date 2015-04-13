@@ -24,9 +24,9 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="abaProcList">
      <attribute name="title">
       <string>Lista de Processos</string>
      </attribute>
@@ -41,7 +41,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="abaDesemp">
      <attribute name="title">
       <string>Desempenho</string>
      </attribute>
@@ -232,11 +232,11 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="abaSistema">
      <attribute name="title">
       <string>Sistema</string>
      </attribute>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="iconeSistema">
       <property name="geometry">
        <rect>
         <x>8</x>
@@ -249,44 +249,38 @@
        <string>Icone do Sistema</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
         <x>140</x>
         <y>60</y>
-        <width>171</width>
-        <height>16</height>
+        <width>550</width>
+        <height>111</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Nome do Computador</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_8">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>80</y>
-        <width>301</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Informações do SO (nome, kernel)</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_9">
-      <property name="geometry">
-       <rect>
-        <x>140</x>
-        <y>100</y>
-        <width>631</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Informações de Hardware (CPU, memória principal, memória secundária disponível)</string>
-      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="NomePC">
+         <property name="text">
+          <string>Nome do Computador</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="infoSO">
+         <property name="text">
+          <string>Informações do SO (nome, kernel)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="infoHW">
+         <property name="text">
+          <string>Informações de Hardware (CPU, memória principal, memória secundária disponível)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>

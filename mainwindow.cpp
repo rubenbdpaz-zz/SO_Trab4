@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+  //CRIAR THREAD PARA GERENCIAR AS 3 ABAS DE UMA VEZ
   model = new QStandardItemModel();
   QStringList headers;
   headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
@@ -87,6 +89,64 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->verticalHeader()->setVisible(false);
     ui->tableView->setSortingEnabled(true);
     ui->tableView->sortByColumn(4, Qt::AscendingOrder);
+
+    //ESSA PARTE DEVE FICAR DENTRO DE UMA THREAD?
+
+    QFile file("/proc/sys/kernel/hostname");
+    QStringList fileData;
+    QString HWinfo;
+    aux =  "Nome do Computador: ";
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        aux += file.readLine();
+        ui->NomePC->setText(aux);
+    }
+    file.close();
+
+    file.setFileName("/proc/version");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        aux = file.readLine();
+        ui->infoSO->setText(aux);
+        ui->infoSO->adjustSize();
+        //AJUSTAR QUEBRA DE LINHA
+    }
+    file.close();
+
+    file.setFileName("/proc/cpuinfo");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        aux = file.readAll();
+        fileData = aux.split("\n");
+        for (j = 0; j < 5; j++){
+            attrib = fileData.at(j).split(":"); //SEPARANDO IDENTIFICADOR E DADO
+            key = attrib.at(0).simplified();
+            value = attrib.at(1).simplified();
+            hash.insert(key, value);
+        }
+        HWinfo = hash.value("model name");
+        HWinfo += "\n";
+    }
+    file.close();
+
+    float memSize;
+    file.setFileName("/proc/meminfo");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        aux = file.readAll();
+        fileData = aux.split("\n");
+        for (j = 0; j < 2; j++){
+            attrib = fileData.at(j).split(":"); //SEPARANDO IDENTIFICADOR E DADO
+            key = attrib.at(0).simplified();
+            value = attrib.at(1).simplified();
+            value.remove("kB");
+            memSize = value.toFloat();
+            memSize /= (1024*1024);
+            value.setNum(memSize,'f', 1);
+            //value.setNum(memSize);
+            value.append(" GiB");
+            hash.insert(key, value);
+        }
+        HWinfo += "Memoria: " + hash.value("MemTotal") + " (" + hash.value("MemFree") + " livre)";
+        ui->infoHW->setText(HWinfo);
+    }
+    file.close();
 
  }
 
