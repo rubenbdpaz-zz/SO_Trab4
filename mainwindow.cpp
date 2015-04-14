@@ -92,6 +92,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ESSA PARTE DEVE FICAR DENTRO DE UMA THREAD?
 
+    QPixmap icone("/usr/share/icons/LoginIcons/apps/64/computer.svg");
+    ui->iconeSistema->setFixedWidth(64);
+    ui->iconeSistema->setFixedHeight(64);
+    ui->iconeSistema->setPixmap(icone);
+    //ui->iconeSistema->show();
+
     QFile file("/proc/sys/kernel/hostname");
     QStringList fileData;
     QString HWinfo;
