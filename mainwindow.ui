@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="abaProcList">
      <attribute name="title">
@@ -38,6 +38,9 @@
         <width>771</width>
         <height>211</height>
        </rect>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
       </property>
      </widget>
     </widget>
@@ -249,12 +252,12 @@
        <string>Icone do Sistema</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>140</x>
         <y>60</y>
-        <width>550</width>
+        <width>565</width>
         <height>111</height>
        </rect>
       </property>
@@ -376,7 +379,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
