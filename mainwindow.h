@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStandardItem>
 #include <QSplitter>
+#include "meminfo.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,10 +18,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void setMemoryGraph();
+    void updateMemoryGraph(QVector<double>, QVector<double>);
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;
     QSplitter *splitter;
+    //Thread *thread1, *thread2;
+    MEMinfo *threadMem;
 
 };
 

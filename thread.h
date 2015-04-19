@@ -1,4 +1,8 @@
-/*ltame/*
+#ifndef THREAD_H
+#define THREAD_H
+
+
+/*
   Class Thread e a classe base que devera ser herdada por outras classes
   c++ dicas: se em uma classe existir pelo menos um metodo virtual puro
   a classe sera considerada abstrata e dessa forma nao podera ser instan-
@@ -7,9 +11,11 @@
 
 
 #include <pthread.h>
+#include <QObject>
 
-class Thread
+class Thread: public QObject
 {
+    Q_OBJECT
 private:
     //Funcao auxiliar da Thread
     static void* funcaoHelper (void*);
@@ -37,3 +43,5 @@ public:
     //Lembrando que um metodo  const nao pode modificar atributos da classe
     pthread_t getThread (void) const;
 };
+
+#endif // THREAD_H

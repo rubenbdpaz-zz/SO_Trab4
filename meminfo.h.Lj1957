@@ -1,0 +1,26 @@
+#ifndef MEMINFO_H
+#define MEMINFO_H
+
+#include "thread.h"
+#include <QVector>
+#include <QFile>
+#include <QThread>
+
+class MEMinfo: public Thread{
+private:
+   QVector<double> x, data;
+   QFile fileInfo;
+   double total, free;
+
+signals:
+    void update(QVector<double>, QVector<double>);
+
+public:
+    MEMinfo();
+    ~MEMinfo();
+    void run();
+    double getTotal();
+    double getFree();
+};
+
+#endif // MEMINFO_H

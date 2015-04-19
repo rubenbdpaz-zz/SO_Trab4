@@ -130,7 +130,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -141,9 +141,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QCustomPlot" name="cpuGraph" native="true">
-         <zorder>memoryGraph</zorder>
-        </widget>
+        <widget class="QCustomPlot" name="cpuGraph" native="true"/>
        </item>
        <item>
         <widget class="QCustomPlot" name="memoryGraph" native="true"/>
@@ -242,7 +240,7 @@
      <string>Finalizar Processo</string>
     </property>
    </widget>
-   <widget class="QDial" name="dial">
+   <widget class="QDial" name="atualizarDial">
     <property name="geometry">
      <rect>
       <x>780</x>
