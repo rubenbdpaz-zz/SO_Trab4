@@ -201,7 +201,7 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QLCDNumber" name="lcdNumber">
+   <widget class="QLCDNumber" name="Nprocs">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -263,7 +263,7 @@
      <string>Atualização</string>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="lcdNumber_2">
+   <widget class="QLCDNumber" name="NThreads">
     <property name="geometry">
      <rect>
       <x>20</x>

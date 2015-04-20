@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     qcustomplot.cpp \
     thread.cpp \
-    meminfo.cpp
+    meminfo.cpp \
+    processos.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot.h \
     thread.h \
-    meminfo.h
+    meminfo.h \
+    processos.h
 
 FORMS    += mainwindow.ui
 
