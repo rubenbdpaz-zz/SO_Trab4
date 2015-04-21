@@ -6,6 +6,7 @@
 #include <QSplitter>
 #include "meminfo.h"
 #include "processos.h"
+#include "cpuinfo.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,7 @@ public slots:
     void setMemoryGraph();
     //void updateMemoryGraph(QVector<double>, QVector<double>);
     void updateMemoryGraph(double);
+    void updateCPU(QVector<double>);
 
     void updateProcesses(QHash<QString, QString>);
 
@@ -36,6 +38,7 @@ private:
     //Thread *thread1, *thread2;
     MEMinfo *threadMem;
     Processos *procs;
+    CPUinfo *threadCPU;
     QList<QStandardItem *> listaItem;
     QVector<double> x, memData;
 

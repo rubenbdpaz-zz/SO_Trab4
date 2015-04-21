@@ -9,17 +9,17 @@ Processos::Processos()
     setProcList();
     numProcessos = procList.count();
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
+    //timer = new QTimer(this);
+    //connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
 
-    timer->start(10000);
+    //timer->start(10000);
 }
-
+/*
 void Processos::TimerSlot()
 {
     this->run();
 }
-
+*/
 Processos::~Processos()
 {
 

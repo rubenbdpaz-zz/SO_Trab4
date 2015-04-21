@@ -29,15 +29,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ABA DESEMPENHO
 
+    x.resize(60);
+    for (int i = 60, j = 0; i > 0; i--, j++)
+        x[j] = i;
+
     //GRÁFICO DA CPU
     ui->cpuGraph->yAxis->setRange(0, 100);
     ui->cpuGraph->yAxis->setAutoTickStep(false);
     ui->cpuGraph->yAxis->setTickStep(50);
+    threadCPU = new CPUinfo();
+    threadCPU->start();
+
+    qRegisterMetaType<QVector<double> >("QVector<double>");
+    connect(threadCPU, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
 
     //GRÁFICO DA MEMÓRIA
-    x.resize(60);
-    for (int i = 60, j = 0; i > 0; i--, j++)
-        x[j] = i;
 
     memData.resize(60);
     memData.fill(0);
@@ -128,7 +134,6 @@ void MainWindow::setMemoryGraph(){
 
 void MainWindow::updateMemoryGraph(double latestData){
     double value;
-    //std::cout <<"value: " << value << std::endl;
     for (int pos = 0; pos < 59; ++pos){
         value = memData[pos+1];
         memData.replace(pos, value);
@@ -149,8 +154,6 @@ void MainWindow::updateProcesses(QHash<QString, QString> newHash){
    listaItem << new QStandardItem(newHash.value("ContextSwitches"));
    model->appendRow(listaItem);
 
-  //model->appendRow(listaItem);
-
   ui->tableView->setModel(model);
   ui->tableView->setShowGrid(false);
   ui->tableView->setAlternatingRowColors(true);
@@ -158,6 +161,54 @@ void MainWindow::updateProcesses(QHash<QString, QString> newHash){
   ui->tableView->setSortingEnabled(true);
   ui->tableView->sortByColumn(4, Qt::AscendingOrder);
 
+}
+
+void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
+/*    QString currentCPU, name = "CPU ";
+    double value;
+    for (int i = 0; i < threadCPU->getNumCPUS(); i++){
+        //std::cout <<"value: " << value << std::endl;
+        for (int pos = 0; pos < 59; ++pos){
+            value = cpuData[pos+1];
+            cpuData.replace(pos, value);
+        }
+        cpuData[59] = percent[i];
+        ui->cpuGraph->addGraph();
+        currentCPU.setNum(i);
+        name += currentCPU;
+        ui->cpuGraph->graph(i)->setName(name);
+
+        //ESCOLHENDO A COR
+        switch (i){
+        case 0:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::blue));
+            break;
+        case 1:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::red));
+            break;
+        case 2:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::green));
+            break;
+        case 3:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::yellow));
+            break;
+        case 4:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::black));
+            break;
+        case 5:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::cyan));
+            break;
+        case 6:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::magenta));
+            break;
+        case 7:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::gray));
+            break;
+        case 8:
+            ui->cpuGraph->graph(i)->setPen(QPen(Qt::darkRed));
+            break;
+        }
+    }*/
 }
 
 void MainWindow::on_pushButton_clicked()

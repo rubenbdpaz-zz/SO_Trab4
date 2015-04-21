@@ -9,12 +9,6 @@
 
 MEMinfo::MEMinfo()
 {
-    //start();
-    //x.resize(60);
-    //for (int i = 60, j = 0; i > 0; i--, j++)
-        //x[j] = i;
-    //data.resize(60);
-    //data.fill(0);
     total = 0;
     free = 0;
 }

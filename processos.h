@@ -17,10 +17,10 @@ public:
     void setProcList();
     int getNumProcessos();
     int getNumThreads();
-    QTimer *timer;
+    //QTimer *timer;
 
 public slots:
-    void TimerSlot();
+    //void TimerSlot();
 
 private:
     QDir dir;
