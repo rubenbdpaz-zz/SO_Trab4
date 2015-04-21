@@ -1,5 +1,6 @@
 #include "processos.h"
 #include <QtCore>
+#include <iostream>
 
 Processos::Processos()
 {
@@ -27,6 +28,7 @@ bool Processos::abrirArquivo(QString fileName){
     if (statusFile.open(QIODevice::ReadOnly | QIODevice::Text)){
         fileInfo = statusFile.readAll();
         statusFile.close();
+        dir.cdUp();
         return true;
     }
     else
@@ -35,10 +37,12 @@ bool Processos::abrirArquivo(QString fileName){
 
 void Processos::run(){
     //ENTRANDO EM CADA PASTA DE PROCESSO E PEGANDO OS DADOS DO ARQUIVO STATUS
-    emit processInfo(hash);
+
     QStringList statusLines, attrib;
     QString key, value;
     for (int i = 0; i < procList.size(); i++){
+        statusLines.clear();
+        attrib.clear();
         hash.clear();
         if (abrirArquivo(procList.at(i))){
                statusLines = fileInfo.split("\n");          //Separando cada linha de "status" e criando uma lista com cada linha;
@@ -53,7 +57,7 @@ void Processos::run(){
         value.setNum(contextSwitches);
         hash.insert("ContextSwitches", value);
         numThreads += hash.value("Threads").toInt();
-
+        emit processInfo(hash);
       }
 
 }

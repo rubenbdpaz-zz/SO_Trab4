@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     procs = new Processos();
 
     connect(procs, SIGNAL(processInfo(QHash <QString, QString>)), SLOT (updateProcesses(QHash<QString, QString>)));
-    procs->start();
+    procs->run();
 
     ui->Nprocs->display(procs->getNumProcessos());
     ui->NThreads->display(procs->getNumThreads());  //NÃO FUNCIONA
@@ -105,13 +105,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cpuGraph->yAxis->setAutoTickStep(false);
     ui->cpuGraph->yAxis->setTickStep(50);
 
-    //GRÁFICO DA MEMÓRIA
+/*    //GRÁFICO DA MEMÓRIA
     threadMem = new MEMinfo();
     setMemoryGraph();
 
     connect(threadMem, SIGNAL(update(QVector<double>, QVector<double>)), SLOT(updateMemoryGraph(QVector<double>, QVector<double>)));
 
-    threadMem->start();
+    threadMem->start();*/
  }
 
 MainWindow::~MainWindow()
@@ -138,6 +138,7 @@ void MainWindow::updateMemoryGraph(QVector<double> x, QVector<double> values){
 }
 
 void MainWindow::updateProcesses(QHash<QString, QString> newHash){
+   listaItem.clear();
    listaItem << new QStandardItem(newHash.value("Name"));
    listaItem << new QStandardItem(newHash.value("State"));
    listaItem << new QStandardItem(newHash.value("Pid"));
