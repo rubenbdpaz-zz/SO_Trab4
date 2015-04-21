@@ -1,9 +1,9 @@
 #include "processos.h"
 #include <QtCore>
-#include <iostream>
 
 Processos::Processos()
 {
+    start();
     dir.setPath("/proc");
     numThreads = 0;
     setProcList();
@@ -23,16 +23,18 @@ void Processos::setProcList(){
 }
 
 bool Processos::abrirArquivo(QString fileName){
+    bool test;
     dir.cd(fileName);
     statusFile.setFileName(dir.absoluteFilePath("status"));
     if (statusFile.open(QIODevice::ReadOnly | QIODevice::Text)){
         fileInfo = statusFile.readAll();
-        statusFile.close();
         dir.cdUp();
-        return true;
+        test = true;
     }
     else
-        return false;
+        test = false;
+    statusFile.close();
+    return test;
 }
 
 void Processos::run(){
