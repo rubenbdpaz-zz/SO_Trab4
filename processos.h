@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QFile>
 #include <QHash>
+#include <QtCore>
 
 class Processos: public Thread{
     Q_OBJECT
@@ -16,6 +17,10 @@ public:
     void setProcList();
     int getNumProcessos();
     int getNumThreads();
+    QTimer *timer;
+
+public slots:
+    void TimerSlot();
 
 private:
     QDir dir;

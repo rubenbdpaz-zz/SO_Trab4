@@ -8,6 +8,16 @@ Processos::Processos()
     numThreads = 0;
     setProcList();
     numProcessos = procList.count();
+
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
+
+    timer->start(10000);
+}
+
+void Processos::TimerSlot()
+{
+    this->run();
 }
 
 Processos::~Processos()
@@ -58,6 +68,7 @@ void Processos::run(){
         hash.insert("ContextSwitches", value);
         numThreads += hash.value("Threads").toInt();
         emit processInfo(hash);
+
       }
 
 }
