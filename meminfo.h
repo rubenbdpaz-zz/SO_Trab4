@@ -2,8 +2,6 @@
 #define MEMINFO_H
 
 #include "thread.h"
-#include <QVector>
-#include <QFile>
 
 class MEMinfo: public Thread{
    Q_OBJECT
@@ -17,11 +15,8 @@ public:
     bool abrirArquivo();
 
 signals:
-    void update(QVector<double>, QVector<double>);
-
+    void update(double);
 private:
-   QVector<double> x, data;
-   QFile memFile;
    QString fileInfo;
    double total, free;
 

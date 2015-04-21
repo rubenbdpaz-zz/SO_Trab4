@@ -25,7 +25,29 @@ MainWindow::MainWindow(QWidget *parent) :
     procs->run();
 
     ui->Nprocs->display(procs->getNumProcessos());
-    ui->NThreads->display(procs->getNumThreads());  //NÃO FUNCIONA
+    ui->NThreads->display(procs->getNumThreads());
+
+    //ABA DESEMPENHO
+
+    //GRÁFICO DA CPU
+    ui->cpuGraph->yAxis->setRange(0, 100);
+    ui->cpuGraph->yAxis->setAutoTickStep(false);
+    ui->cpuGraph->yAxis->setTickStep(50);
+
+    //GRÁFICO DA MEMÓRIA
+    x.resize(60);
+    for (int i = 60, j = 0; i > 0; i--, j++)
+        x[j] = i;
+
+    memData.resize(60);
+    memData.fill(0);
+    threadMem = new MEMinfo();
+    setMemoryGraph();
+
+    //connect(threadMem, SIGNAL(update(QVector<double>, QVector<double>)), SLOT(updateMemoryGraph(QVector<double>, QVector<double>)));
+    connect(threadMem, SIGNAL(update(double)), SLOT(updateMemoryGraph(double)));
+    threadMem->start();
+    //threadMem->run();
 
     //ABA INFORMAÇÕES DO SISTEMA
 
@@ -75,44 +97,14 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     file.close();
 
-    //INFORMAÇÕES DE MEMORIA // MUDAR PRA PEGAR AS INFORMAÇÕES DA THREAD DE MEMORIA
-    float memSize;
-    file.setFileName("/proc/meminfo");
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        aux = file.readAll();
-        fileData = aux.split("\n");
-        for (int j = 0; j < 2; j++){
-            attrib = fileData.at(j).split(":"); //SEPARANDO IDENTIFICADOR E DADO
-            key = attrib.at(0).simplified();
-            value = attrib.at(1).simplified();
-            value.remove("kB");
-            memSize = value.toFloat();
-            memSize /= (1024*1024);
-            value.setNum(memSize,'f', 1);
-            value.append(" GiB");
-            hash.insert(key, value);
-        }
-        HWinfo += "Memoria: " + hash.value("MemTotal") + " (" + hash.value("MemFree") + " livre)";
-        ui->infoHW->setText(HWinfo);
-    }
-    file.close();
-
-
-    //ABA DESEMPENHO
-
-    //GRÁFICO DA CPU
-    ui->cpuGraph->yAxis->setRange(0, 100);
-    ui->cpuGraph->yAxis->setAutoTickStep(false);
-    ui->cpuGraph->yAxis->setTickStep(50);
-
-/*    //GRÁFICO DA MEMÓRIA
-    threadMem = new MEMinfo();
-    setMemoryGraph();
-
-    connect(threadMem, SIGNAL(update(QVector<double>, QVector<double>)), SLOT(updateMemoryGraph(QVector<double>, QVector<double>)));
-
-    threadMem->start();*/
- }
+   //INFORMAÇÕES DE MEMORIA
+    double memSize;
+    memSize = (threadMem->getTotal())/(1024*1024);
+    HWinfo += "Memoria: " + value.setNum(memSize, 'f', 1) + " GB (";
+    memSize = (threadMem->getFree())/(1024*1024);
+    HWinfo += value.setNum(memSize, 'f', 1) + " GB livres )";
+    ui->infoHW->setText(HWinfo);
+}
 
 MainWindow::~MainWindow()
 {
@@ -125,16 +117,25 @@ void MainWindow::setMemoryGraph(){
     ui->memoryGraph->yAxis->setAutoTickStep(false);
     ui->memoryGraph->yAxis->setTickStep(50);
     ui->memoryGraph->xAxis->setRange(0, 60);
+    ui->memoryGraph->xAxis->setTickStep(15);
     ui->memoryGraph->addGraph();
     ui->memoryGraph->graph(0)->setName("Uso de Memória");
-    ui->memoryGraph->legend->setVisible(true);
-    ui->memoryGraph->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignLeft|Qt::AlignBottom);
+    //ui->memoryGraph->legend->setVisible(true);
+    //ui->memoryGraph->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignLeft|Qt::AlignBottom);
 
 
 }
 
-void MainWindow::updateMemoryGraph(QVector<double> x, QVector<double> values){
-    ui->memoryGraph->graph(0)->setData(x, values);
+void MainWindow::updateMemoryGraph(double latestData){
+    double value;
+    //std::cout <<"value: " << value << std::endl;
+    for (int pos = 0; pos < 59; ++pos){
+        value = memData[pos+1];
+        memData.replace(pos, value);
+    }
+    memData[59] = latestData;
+    ui->memoryGraph->graph(0)->setData(x, memData);
+    ui->memoryGraph->replot();
 }
 
 void MainWindow::updateProcesses(QHash<QString, QString> newHash){

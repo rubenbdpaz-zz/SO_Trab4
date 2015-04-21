@@ -16,7 +16,7 @@
 class Thread: public QObject
 {
     Q_OBJECT
-private:
+protected:
     //Funcao auxiliar da Thread
     static void* funcaoHelper (void*);
 

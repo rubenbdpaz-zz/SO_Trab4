@@ -3,15 +3,18 @@
 //#include <QApplication>
 #include <QtCore>
 #include <unistd.h>
+#include <iostream>
+#include <QFile>
 
 
 MEMinfo::MEMinfo()
 {
-    x.resize(60);
-    for (int i = 0; i < 60; i++)
-        x[i] = i;
-    data.resize(60);
-    data.fill(0);
+    //start();
+    //x.resize(60);
+    //for (int i = 60, j = 0; i > 0; i--, j++)
+        //x[j] = i;
+    //data.resize(60);
+    //data.fill(0);
     total = 0;
     free = 0;
 }
@@ -21,45 +24,41 @@ MEMinfo::MEMinfo()
 
 }*/
 bool MEMinfo::abrirArquivo(){
-    bool test;
-    memFile.setFileName("/proc/meminfo");
+    QFile memFile("/proc/meminfo");
     if (memFile.open(QIODevice::ReadOnly | QIODevice::Text)){
         fileInfo = memFile.readAll();
-        test = true;
+        memFile.close();
+        return true;
     }
-    else{
-        test = false;
-    }
-    memFile.close();
-    return test;
+    else
+        return false;
 }
 
 
 void MEMinfo::run(){
-       int pos;
+       //int pos;
        double value;
-       QString aux;
+       QString key, aux;
        QStringList fileData, attrib;
        QHash <QString, double> hash;
        
        while(true){
-           emit update(x, data);
+           fileData.clear();
+           attrib.clear();
+           hash.clear();
            if (abrirArquivo()){
                fileData = fileInfo.split("\n");
                for (int j = 0; j < 2; j++){
                    attrib = fileData.at(j).split(":"); //SEPARANDO IDENTIFICADOR E DADO
-                   aux = attrib.at(0).simplified();
-                   attrib.at(1).simplified().remove("kB");
-                   value = attrib.at(1).toDouble();
-                   hash.insert(aux, value);
-               }
-               for (pos = 0; pos < 59; ++pos){
-                   value = data[pos+1];
-                   data.replace(pos, value);
+                   key = attrib.at(0).simplified();
+                   aux = attrib.at(1).simplified().remove("kB");
+                   value = aux.toDouble();
+                   hash.insert(key, value);
                }
                total = hash.value("MemTotal");
                free = hash.value("MemFree");
-               data[59] = (total-free)*100/total;
+               value = (total-free)*100/total;
+               emit update(value);
            }
            sleep(1);
     }
