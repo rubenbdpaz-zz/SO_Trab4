@@ -34,6 +34,8 @@ public slots:
 private slots:
     void on_pushButton_clicked();
 
+    void on_atualizarDial_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;

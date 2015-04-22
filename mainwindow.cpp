@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
     model->setHorizontalHeaderLabels(headers);
 
+    ui->atualizarDial->setRange(3, 10);
     procs = new Processos();
 
     qRegisterMetaType<QHash <QString, QString> >("QHash <QString, QString>");
@@ -26,8 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     procs->start();
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
-
-    timer->start(2000);
+    timer->start(5000);
 
     //ABA DESEMPENHO
 
@@ -261,4 +261,12 @@ void MainWindow::TimerSlot(){
     headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
     model->setHorizontalHeaderLabels(headers);
     procs->run();
+}
+
+void MainWindow::on_atualizarDial_valueChanged(int value)
+{
+    //timer->stop();
+    //std::cout << value << std::endl;
+    //timer->setInterval(value*1000);
+    //timer->start();
 }

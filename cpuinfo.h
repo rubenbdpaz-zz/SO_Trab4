@@ -13,14 +13,14 @@ public:
     //~CPUinfo();
     bool abrirArquivo();
     void run();
-    void initDeltas();
+    void getClockTick();
     void setPercent();
     int getNumCPUS();
     int getCpuAtual();
 
 private:
     QString fileInfo;
-    int numCPU, cpuAtual;
+    int numCPU, cpuAtual, CLK_TCK;
     double t_uso, t_ocioso, t_boot;
     //QVector<double> delta1, delta2, delta3, delta4, percents;
     double delta1, delta2, delta3, delta4, percents;

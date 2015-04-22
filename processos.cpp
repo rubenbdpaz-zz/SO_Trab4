@@ -43,6 +43,7 @@ void Processos::run(){
 
     QStringList statusLines, attrib;
     QString key, value;
+    QFile users("users.txt");
     for (int i = 0; i < procList.size(); i++){
         statusLines.clear();
         attrib.clear();
@@ -61,11 +62,14 @@ void Processos::run(){
         hash.insert("ContextSwitches", value);
         numThreads += hash.value("Threads").toInt();
 
-/*ERRO:        value = (hash.value("Uid").split(QRegExp("\\s+"))).at(0);
+        value = (hash.value("Uid").split(QRegExp("\\s+"))).at(0);
         QString command = "getent passwd ";
-        command += value + " | cut -d: -f1";
-        value = system(qPrintable(command));
-        hash.insert("Uid", value);*/
+        command += value + " | cut -d: -f1 > users.txt";
+        system(qPrintable(command));
+        if (users.open(QIODevice::ReadOnly | QIODevice::Text))
+            value = users.readLine();
+        users.close();
+        hash.insert("Uid", value);
 
         emit processInfo(hash);
 

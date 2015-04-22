@@ -17,6 +17,9 @@ CPUinfo::CPUinfo(int i)
     percents.fill(0);
     */
     delta1 = delta2 = delta3 = delta4 = percents = 0;
+    getClockTick();
+
+
 }
 
 /*CPUinfo::~CPUinfo()
@@ -27,11 +30,15 @@ QVector cpuatual
 */
 
 
-void CPUinfo::initDeltas(){
-/*    delta1.fill(0);
-    delta2.fill(0);
-    delta3.fill(0);
-    delta4.fill(0);*/
+void CPUinfo::getClockTick(){
+    QString clockTick;
+    QFile aux("clocktick.txt");
+
+    system("getconf CLK_TCK > clocktick.txt");
+    if (aux.open(QIODevice::ReadOnly | QIODevice::Text))
+            clockTick = aux.readLine();
+    aux.close();
+    CLK_TCK = clockTick.toInt();
 }
 
 void CPUinfo::setPercent(){
@@ -103,8 +110,8 @@ void CPUinfo::run(){
                 sleep(1);
             }
             lineData = fileLines[0].split(QRegExp("\\s+"));
-            t_uso = (lineData[1].toDouble() + lineData[2].toDouble() + lineData[3].toDouble())/100;
-            t_ocioso = lineData[4].toDouble()/100;
+            t_uso = (lineData[1].toDouble() + lineData[2].toDouble() + lineData[3].toDouble())/CLK_TCK;
+            t_ocioso = lineData[4].toDouble()/CLK_TCK;
             t_boot = t_uso + t_ocioso;
 
             setPercent();
