@@ -7,6 +7,7 @@
 #include "meminfo.h"
 #include "processos.h"
 #include "cpuinfo.h"
+#include <QVector>
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +29,7 @@ public slots:
     void updateCPU(QVector<double>);
 
     void updateProcesses(QHash<QString, QString>);
+    void TimerSlot();
 
 private slots:
     void on_pushButton_clicked();
@@ -43,6 +45,7 @@ private:
     QList<QStandardItem *> listaItem;
     QVector<double> x, memData;
     QVector< QVector<double> > cpuData;
+    QTimer *timer;
 
 };
 

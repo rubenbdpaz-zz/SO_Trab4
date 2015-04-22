@@ -23,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(procs, SIGNAL(processInfo(QHash <QString, QString>)), SLOT (updateProcesses(QHash<QString, QString>)));
     procs->run();
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
+
+    timer->start(2000);
 
     ui->Nprocs->display(procs->getNumProcessos());
     ui->NThreads->display(procs->getNumThreads());
@@ -39,8 +43,11 @@ MainWindow::MainWindow(QWidget *parent) :
     threadCPU = new CPUinfo();
     threadCPU->start();
 
-    qRegisterMetaType<QVector<double> >("QVector<double>");
-    connect(threadCPU, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
+    //for (int i = 0; i < threadCPU->getNumCPUS(); i++)
+      //  CPUinfo *cpu = new CPUinfo();
+        qRegisterMetaType<QVector<double> >("QVector<double>");
+        //connect(cpu, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
+        connect(threadCPU, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
 
     //GRÁFICO DA MEMÓRIA
 
@@ -121,7 +128,7 @@ void MainWindow::setMemoryGraph(){
     ui->memoryGraph->yAxis->setRange(0, 100);
     ui->memoryGraph->yAxis->setAutoTickStep(false);
     ui->memoryGraph->yAxis->setTickStep(50);
-    ui->memoryGraph->xAxis->setRange(0, 60);
+    ui->memoryGraph->xAxis->setRange(60, 0);
     ui->memoryGraph->xAxis->setTickStep(15);
     ui->memoryGraph->addGraph();
     ui->memoryGraph->graph(0)->setName("Uso de Memória");
@@ -164,20 +171,20 @@ void MainWindow::updateProcesses(QHash<QString, QString> newHash){
 
 void MainWindow::setCPUgraph(){
     int nCPU = threadCPU->getNumCPUS();
-    cpuData.resize(nCPU);
+ /*   cpuData.resize(nCPU);
     for(int i = 0; i < nCPU; i++){
         cpuData[i].resize(60);
         cpuData[i].fill(0);
-    }
+    }*/
     ui->cpuGraph->yAxis->setRange(0, 100);
     ui->cpuGraph->yAxis->setAutoTickStep(false);
     ui->cpuGraph->yAxis->setTickStep(50);
-    ui->cpuGraph->xAxis->setRange(0, 60);
+    ui->cpuGraph->xAxis->setRange(60, 0);
     ui->cpuGraph->xAxis->setTickStep(15);
 }
 
 void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
-    QString currentCPU, name = "CPU ";
+/*    QString currentCPU, name = "CPU ";
     double value;
     int i = 0;
     for (int i = 0; i < threadCPU->getNumCPUS(); i++){
@@ -187,7 +194,7 @@ void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
             cpuData[i].replace(pos, value);
         }
         cpuData[i][59] = percent[i];
-        std::cout << cpuData[i][59] << std::endl;
+        //std::cout << cpuData[i][59] << std::endl;
         ui->cpuGraph->addGraph();
         //currentCPU.setNum(i+1);
         //name += currentCPU;
@@ -225,10 +232,20 @@ void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
         }
         ui->cpuGraph->graph(i)->setData(x, cpuData[i]);
         ui->cpuGraph->replot();
-    }
+    }*/
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     //listaitem. (....) ?
+    //ui->tableView->selectRow(); (???)
+    //ver help do QtableView
+}
+
+void MainWindow::TimerSlot(){
+    model->clear();
+    QStringList headers;
+    headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
+    model->setHorizontalHeaderLabels(headers);
+    procs->run();
 }
