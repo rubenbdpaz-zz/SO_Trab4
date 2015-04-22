@@ -36,6 +36,7 @@ bool Processos::abrirArquivo(QString fileName){
 }
 
 void Processos::run(){
+    //std::cout <<" chamou o run \n";
     //ENTRANDO EM CADA PASTA DE PROCESSO E PEGANDO OS DADOS DO ARQUIVO STATUS
     numThreads = 0;
     setProcList();

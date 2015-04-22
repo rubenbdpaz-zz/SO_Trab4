@@ -31,7 +31,7 @@ bool MEMinfo::abrirArquivo(){
 
 void MEMinfo::run(){
        //int pos;
-       double value;
+       double value, swapValue;
        QString key, aux;
        QStringList fileData, attrib;
        QHash <QString, double> hash;
@@ -42,7 +42,7 @@ void MEMinfo::run(){
            hash.clear();
            if (abrirArquivo()){
                fileData = fileInfo.split("\n");
-               for (int j = 0; j < 2; j++){
+               for (int j = 0; j < fileData.size()-1; j++){
                    attrib = fileData.at(j).split(":"); //SEPARANDO IDENTIFICADOR E DADO
                    key = attrib.at(0).simplified();
                    aux = attrib.at(1).simplified().remove("kB");
@@ -51,8 +51,14 @@ void MEMinfo::run(){
                }
                total = hash.value("MemTotal");
                free = hash.value("MemFree");
+               swapTotal = hash.value("SwapTotal");
+               //std::cout << swapTotal << std::endl;
+               swapFree = hash.value("SwapFree");
+
+               //std::cout << swapFree << std::endl;
                value = (total-free)*100/total;
-               emit update(value);
+               swapValue = (swapTotal - swapFree)*100/swapTotal;
+               emit update(value, swapValue);
            }
            sleep(1);
     }

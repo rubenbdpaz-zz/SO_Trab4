@@ -6,6 +6,7 @@
 #include <QHash>
 #include <iostream>
 #include "meminfo.h"
+#include <unistd.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,14 +21,19 @@ MainWindow::MainWindow(QWidget *parent) :
     model->setHorizontalHeaderLabels(headers);
 
     ui->atualizarDial->setRange(3, 10);
+    ui->atualizarDial->setTracking(false);
+
     procs = new Processos();
 
     qRegisterMetaType<QHash <QString, QString> >("QHash <QString, QString>");
     connect(procs, SIGNAL(processInfo(QHash <QString, QString>)), SLOT (updateProcesses(QHash<QString, QString>)));
     procs->start();
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
-    timer->start(5000);
+    //connect(ui->atualizarDial, SIGNAL(valueChanged(int)), timer, SLOT(start(int)));
+    timer->setInterval(5000);
+    timer->start();
 
     //ABA DESEMPENHO
 
@@ -52,11 +58,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     memData.resize(60);
     memData.fill(0);
+    swapData.resize(60);
+    swapData.fill(0);
     threadMem = new MEMinfo();
     setMemoryGraph();
 
     //connect(threadMem, SIGNAL(update(QVector<double>, QVector<double>)), SLOT(updateMemoryGraph(QVector<double>, QVector<double>)));
-    connect(threadMem, SIGNAL(update(double)), SLOT(updateMemoryGraph(double)));
+    connect(threadMem, SIGNAL(update(double, double)), SLOT(updateMemoryGraph(double, double)));
     threadMem->start();
     //threadMem->run();
 
@@ -128,20 +136,27 @@ void MainWindow::setMemoryGraph(){
     ui->memoryGraph->xAxis->setTickStep(15);
     ui->memoryGraph->addGraph();
     ui->memoryGraph->graph(0)->setName("Uso de Memória");
-    //ui->memoryGraph->legend->setVisible(true);
-    //ui->memoryGraph->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignLeft|Qt::AlignBottom);
+    ui->memoryGraph->addGraph();
+    ui->memoryGraph->graph(1)->setName("Swap");
+    ui->memoryGraph->graph(1)->setPen(QPen(Qt::red));
+    ui->memoryGraph->legend->setVisible(true);
+    ui->memoryGraph->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignLeft|Qt::AlignBottom);
 
 
 }
 
-void MainWindow::updateMemoryGraph(double latestData){
+void MainWindow::updateMemoryGraph(double latestData, double latestSwap){
     double value;
     for (int pos = 0; pos < 59; ++pos){
         value = memData[pos+1];
         memData.replace(pos, value);
+        value = swapData[pos+1];
+        swapData.replace(pos, value);
     }
     memData[59] = latestData;
+    swapData[59] = latestSwap;
     ui->memoryGraph->graph(0)->setData(x, memData);
+    ui->memoryGraph->graph(1)->setData(x, swapData);
     ui->memoryGraph->replot();
 }
 
@@ -184,6 +199,9 @@ void MainWindow::setCPUgraph(){
     ui->cpuGraph->yAxis->setTickStep(50);
     ui->cpuGraph->xAxis->setRange(60, 0);
     ui->cpuGraph->xAxis->setTickStep(15);
+    ui->cpuGraph->axisRect()->insetLayout()->setInsetAlignment(0,Qt::AlignLeft|Qt::AlignBottom);
+    ui->cpuGraph->legend->setVisible(true);
+
 }
 
 //void MainWindow::updateCPU(QVector<double> percent, double uso, double ocioso, double boot){  //VETOR DE CPUS?!?!
@@ -218,30 +236,35 @@ void MainWindow::updateCPU(double percent, double uso, double ocioso, double boo
         switch (cpuAtual){
         case 0:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::blue));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 1");
             break;
         case 1:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::red));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 2");
             break;
         case 2:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::green));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 3");
             break;
         case 3:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::yellow));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 4");
             break;
         case 4:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::black));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 5");
             break;
         case 5:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::cyan));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 6");
             break;
         case 6:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::magenta));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 7");
             break;
         case 7:
             ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::gray));
-            break;
-        case 8:
-            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::darkRed));
+            ui->cpuGraph->graph(cpuAtual)->setName("CPU 8");
             break;
         }
         ui->cpuGraph->graph(cpuAtual)->setData(x, cpuData);
@@ -265,8 +288,10 @@ void MainWindow::TimerSlot(){
 
 void MainWindow::on_atualizarDial_valueChanged(int value)
 {
+    //value *= 1000;
     //timer->stop();
     //std::cout << value << std::endl;
+
     //timer->setInterval(value*1000);
     //timer->start();
 }

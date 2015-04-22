@@ -15,10 +15,10 @@ public:
     bool abrirArquivo();
 
 signals:
-    void update(double);
+    void update(double, double);
 private:
    QString fileInfo;
-   double total, free;
+   double total, free, swapTotal, swapFree;
 
 };
 

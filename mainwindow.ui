@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>System Monitor</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(113, 113, 113);</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -23,8 +26,11 @@
       <height>341</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: white;</string>
+    </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="abaProcList">
      <attribute name="title">
@@ -93,7 +99,7 @@
            <string notr="true">background-color: white;</string>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -123,7 +129,7 @@
            <string notr="true">background-color: white;</string>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -153,7 +159,7 @@
            <string notr="true">background-color: white;</string>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -174,10 +180,18 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QCustomPlot" name="cpuGraph" native="true"/>
+        <widget class="QCustomPlot" name="cpuGraph" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(113, 113, 113);</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QCustomPlot" name="memoryGraph" native="true"/>
+        <widget class="QCustomPlot" name="memoryGraph" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(113, 113, 113);</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -189,10 +203,10 @@
      <widget class="QLabel" name="iconeSistema">
       <property name="geometry">
        <rect>
-        <x>8</x>
+        <x>40</x>
         <y>60</y>
-        <width>101</width>
-        <height>101</height>
+        <width>131</width>
+        <height>151</height>
        </rect>
       </property>
       <property name="text">
@@ -202,8 +216,8 @@
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>140</x>
-        <y>60</y>
+        <x>210</x>
+        <y>80</y>
         <width>565</width>
         <height>111</height>
        </rect>
@@ -326,24 +340,6 @@
      <string>Número de threads</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>848</width>
-     <height>25</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
