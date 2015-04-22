@@ -21,15 +21,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     procs = new Processos();
 
+    qRegisterMetaType<QHash <QString, QString> >("QHash <QString, QString>");
     connect(procs, SIGNAL(processInfo(QHash <QString, QString>)), SLOT (updateProcesses(QHash<QString, QString>)));
-    procs->run();
+    procs->start();
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
 
     timer->start(2000);
-
-    ui->Nprocs->display(procs->getNumProcessos());
-    ui->NThreads->display(procs->getNumThreads());
 
     //ABA DESEMPENHO
 
@@ -38,16 +36,17 @@ MainWindow::MainWindow(QWidget *parent) :
         x[j] = j;
 
     //GRÁFICO DA CPU
-
-    setCPUgraph();
-    threadCPU = new CPUinfo();
+    threadCPU = new CPUinfo(-1);
     threadCPU->start();
+    setCPUgraph();
 
-    //for (int i = 0; i < threadCPU->getNumCPUS(); i++)
-      //  CPUinfo *cpu = new CPUinfo();
+    for (int i = 0; i < threadCPU->getNumCPUS(); i++){
+        CPUinfo *cpu = new CPUinfo(i);
+        cpu->start();
         qRegisterMetaType<QVector<double> >("QVector<double>");
-        //connect(cpu, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
-        connect(threadCPU, SIGNAL(update(QVector<double>)), SLOT(updateCPU(QVector<double>)));
+        connect(cpu, SIGNAL(update(double, double, double, double, int)), SLOT(updateCPU(double,double,double,double, int)));
+        //connect(threadCPU, SIGNAL(update(QVector<double>, double, double, double)), SLOT(updateCPU(QVector<double>, double, double, double)));
+    }
 
     //GRÁFICO DA MEMÓRIA
 
@@ -167,15 +166,22 @@ void MainWindow::updateProcesses(QHash<QString, QString> newHash){
   ui->tableView->setSortingEnabled(true);
   ui->tableView->sortByColumn(4, Qt::AscendingOrder);
 
+  ui->Nprocs->display(procs->getNumProcessos());
+  ui->NThreads->display(procs->getNumThreads());
+
 }
 
 void MainWindow::setCPUgraph(){
     int nCPU = threadCPU->getNumCPUS();
- /*   cpuData.resize(nCPU);
+//    cpuData.resize(nCPU);
     for(int i = 0; i < nCPU; i++){
-        cpuData[i].resize(60);
-        cpuData[i].fill(0);
-    }*/
+        //cpuData[i].resize(60);
+        //cpuData[i].fill(0);
+        ui->cpuGraph->addGraph();
+    }
+    //std::cout << nCPU << std::endl;
+    cpuData.resize(60);
+    cpuData.fill(0);
     ui->cpuGraph->yAxis->setRange(0, 100);
     ui->cpuGraph->yAxis->setAutoTickStep(false);
     ui->cpuGraph->yAxis->setTickStep(50);
@@ -183,10 +189,14 @@ void MainWindow::setCPUgraph(){
     ui->cpuGraph->xAxis->setTickStep(15);
 }
 
-void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
-/*    QString currentCPU, name = "CPU ";
+//void MainWindow::updateCPU(QVector<double> percent, double uso, double ocioso, double boot){  //VETOR DE CPUS?!?!
+void MainWindow::updateCPU(double percent, double uso, double ocioso, double boot, int cpuAtual){  //VETOR DE CPUS?!?!
+    QString currentCPU, name = "CPU ";
+    ui->usoCPU->setText(currentCPU.setNum(uso) + " s");
+    ui->ocioso->setText(currentCPU.setNum(ocioso) + " s");
+    ui->uptime->setText(currentCPU.setNum(boot) + " s");
     double value;
-    int i = 0;
+/*    //int i = 0;
     for (int i = 0; i < threadCPU->getNumCPUS(); i++){
         //std::cout <<"value: " << value << std::endl;
         for (int pos = 0; pos < 59; ++pos){
@@ -196,43 +206,49 @@ void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
         cpuData[i][59] = percent[i];
         //std::cout << cpuData[i][59] << std::endl;
         ui->cpuGraph->addGraph();
-        //currentCPU.setNum(i+1);
-        //name += currentCPU;
-        //ui->cpuGraph->graph(i)->setName(name);
-
+        currentCPU.setNum(i+1);
+        name += currentCPU;
+        ui->cpuGraph->graph(i)->setName(name);
+*/
+    for (int pos = 0; pos < 59; ++pos){
+        value = cpuData[pos+1];
+        cpuData.replace(pos, value);
+    }
+    cpuData[59] = percent;
+    ui->cpuGraph->graph(cpuAtual)->setData(x, cpuData);
+    ui->cpuGraph->replot();
         //ESCOLHENDO A COR
-        switch (i){
+        switch (cpuAtual){
         case 0:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::blue));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::blue));
             break;
         case 1:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::red));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::red));
             break;
         case 2:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::green));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::green));
             break;
         case 3:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::yellow));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::yellow));
             break;
         case 4:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::black));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::black));
             break;
         case 5:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::cyan));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::cyan));
             break;
         case 6:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::magenta));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::magenta));
             break;
         case 7:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::gray));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::gray));
             break;
         case 8:
-            ui->cpuGraph->graph(i)->setPen(QPen(Qt::darkRed));
+            ui->cpuGraph->graph(cpuAtual)->setPen(QPen(Qt::darkRed));
             break;
         }
-        ui->cpuGraph->graph(i)->setData(x, cpuData[i]);
+        ui->cpuGraph->graph(cpuAtual)->setData(x, cpuData);
         ui->cpuGraph->replot();
-    }*/
 }
 
 void MainWindow::on_pushButton_clicked()

@@ -11,17 +11,13 @@ class Processos: public Thread{
     Q_OBJECT
 public:
     Processos();
-    ~Processos();
+    //~Processos();
     void run();
     bool abrirArquivo(QString);
     void setProcList();
     int getNumProcessos();
     int getNumThreads();
-/*    QTimer *timer;
 
-public slots:
-    void TimerSlot();
-*/
 private:
     QDir dir;
     QFile statusFile;

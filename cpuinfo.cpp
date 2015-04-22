@@ -3,17 +3,20 @@
 #include <iostream>
 #include <unistd.h>
 
-CPUinfo::CPUinfo()
+CPUinfo::CPUinfo(int i)
 {
+    cpuAtual = i;
     abrirArquivo();
     numCPU = fileInfo.count("cpu") - 1;
-    delta1.resize(numCPU);
-    delta2.resize(numCPU);
-    delta3.resize(numCPU);
-    delta4.resize(numCPU);
+/*    delta1.resize(numCPU+1);
+    delta2.resize(numCPU+1);
+    delta3.resize(numCPU+1);
+    delta4.resize(numCPU+1);
     initDeltas();
     percents.resize(numCPU);
     percents.fill(0);
+    */
+    delta1 = delta2 = delta3 = delta4 = percents = 0;
 }
 
 /*CPUinfo::~CPUinfo()
@@ -23,18 +26,21 @@ QVector cpuatual
 }
 */
 
+
 void CPUinfo::initDeltas(){
-    delta1.fill(0);
+/*    delta1.fill(0);
     delta2.fill(0);
     delta3.fill(0);
-    delta4.fill(0);
+    delta4.fill(0);*/
 }
 
 void CPUinfo::setPercent(){
-    for (int i = 0; i < numCPU; i++){
-        percents[i] = delta1[i] + delta2[i] + delta3[i];
-        percents[i] = percents[i]*100/(percents[i]+delta4[i]);
-    }
+    /*for (int i = 0; i < numCPU; i++){
+        percents[i] = delta1[i+1] + delta2[i+1] + delta3[i+1];
+        percents[i] = percents[i]*100/(percents[i]+delta4[i+1]);
+    }*/
+    percents = delta1 + delta2 + delta3;
+    percents = percents*100/(percents + delta4);
 }
 
 bool CPUinfo::abrirArquivo(){
@@ -50,31 +56,60 @@ bool CPUinfo::abrirArquivo(){
 
 
 void CPUinfo::run(){
-    QStringList fileLines, lineData;
+/*  QStringList fileLines, lineData;
     while (true){
-        int i = 0;
+        //int clocktck = system("getconf CLK_TCK");
         for (int j = 0; j < 2; j++){
             if (abrirArquivo()){
                 fileLines = fileInfo.split("\n");
-                //for (int i = 0; i < numCPU; i++){
-                    lineData = fileLines[i+1].split(QRegExp("\\s+"));
-                    delta1[i] = lineData[1].toDouble() - delta1[i];
-                    delta2[i] = lineData[2].toDouble() - delta2[i];
-                    delta3[i] = lineData[3].toDouble() - delta3[i];
-                    delta4[i] = lineData[4].toDouble() - delta4[i];
-
-                //}
+                for (int i = 0; i <= numCPU; i++){
+                    lineData = fileLines[i].split(QRegExp("\\s+"));
+                    if (i == 0){
+                        delta1[0] = lineData[1].toDouble();
+                        delta2[0] = lineData[2].toDouble();
+                        delta3[0] = lineData[3].toDouble();
+                        delta4[0] = lineData[4].toDouble();
+                    }
+                    else{
+                        delta1[i] = lineData[1].toDouble() - delta1[i];
+                        delta2[i] = lineData[2].toDouble() - delta2[i];
+                        delta3[i] = lineData[3].toDouble() - delta3[i];
+                        delta4[i] = lineData[4].toDouble() - delta4[i];
+                    }
+                }
             }
             sleep(1);
         }
-     /*   std::cout << delta1[i] << std::endl;
-        std::cout << delta2[i] << std::endl;
-        std::cout << delta3[i] << std::endl;
-        std::cout << delta4[i] << std::endl;
-   */     setPercent();
-        //std::cout << std::endl << percents[i] << std::endl;
-        emit(update(percents));
+
+        setPercent();
+        t_uso = (delta1[0] + delta2[0] + delta3[0])/100;
+        t_ocioso = delta4[0]/100;
+        t_boot = (t_uso + t_ocioso);
+        emit(update(percents, t_uso, t_ocioso, t_boot));
     }
+*/
+    QStringList fileLines, lineData;
+        while (true){
+            //int clocktck = system("getconf CLK_TCK");
+            for (int j = 0; j < 2; j++){
+                if (abrirArquivo()){
+                    fileLines = fileInfo.split("\n");
+                    lineData = fileLines[cpuAtual+1].split(QRegExp("\\s+"));
+                    delta1 = lineData[1].toDouble() - delta1;
+                    delta2 = lineData[2].toDouble() - delta2;
+                    delta3 = lineData[3].toDouble() - delta3;
+                    delta4 = lineData[4].toDouble() - delta4;
+                 }
+                sleep(1);
+            }
+            lineData = fileLines[0].split(QRegExp("\\s+"));
+            t_uso = (lineData[1].toDouble() + lineData[2].toDouble() + lineData[3].toDouble())/100;
+            t_ocioso = lineData[4].toDouble()/100;
+            t_boot = t_uso + t_ocioso;
+
+            setPercent();
+            emit(update(percents, t_uso, t_ocioso, t_boot, cpuAtual));
+        }
 }
 
 int CPUinfo::getNumCPUS(){

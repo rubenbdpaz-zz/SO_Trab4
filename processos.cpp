@@ -1,30 +1,18 @@
 #include "processos.h"
 #include <QtCore>
+#include <iostream>
+#include <unistd.h>
 
 Processos::Processos()
 {
-    start();
     dir.setPath("/proc");
-    numThreads = 0;
-    setProcList();
-    numProcessos = procList.count();
-/*
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
-
-    timer->start(10000);*/
 }
 
-/*void Processos::TimerSlot()
+/*Processos::~Processos()
 {
-    this->run();
+
 }
 */
-Processos::~Processos()
-{
-
-}
-
 void Processos::setProcList(){
     QStringList filters("*[0-9]");
     dir.setNameFilters(filters);
@@ -49,6 +37,9 @@ bool Processos::abrirArquivo(QString fileName){
 
 void Processos::run(){
     //ENTRANDO EM CADA PASTA DE PROCESSO E PEGANDO OS DADOS DO ARQUIVO STATUS
+    numThreads = 0;
+    setProcList();
+    numProcessos = procList.count();
 
     QStringList statusLines, attrib;
     QString key, value;
@@ -69,6 +60,13 @@ void Processos::run(){
         value.setNum(contextSwitches);
         hash.insert("ContextSwitches", value);
         numThreads += hash.value("Threads").toInt();
+
+/*ERRO:        value = (hash.value("Uid").split(QRegExp("\\s+"))).at(0);
+        QString command = "getent passwd ";
+        command += value + " | cut -d: -f1";
+        value = system(qPrintable(command));
+        hash.insert("Uid", value);*/
+
         emit processInfo(hash);
 
       }

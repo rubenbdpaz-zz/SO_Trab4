@@ -26,8 +26,8 @@ public slots:
     void setCPUgraph();
     //void updateMemoryGraph(QVector<double>, QVector<double>);
     void updateMemoryGraph(double);
-    void updateCPU(QVector<double>);
-
+    //void updateCPU(QVector<double>, double, double, double);
+    void updateCPU(double, double, double, double, int);
     void updateProcesses(QHash<QString, QString>);
     void TimerSlot();
 
@@ -43,8 +43,8 @@ private:
     Processos *procs;
     CPUinfo *threadCPU;
     QList<QStandardItem *> listaItem;
-    QVector<double> x, memData;
-    QVector< QVector<double> > cpuData;
+    QVector<double> x, memData, cpuData;
+    //QVector< QVector<double> > cpuData;
     QTimer *timer;
 
 };
