@@ -18,7 +18,8 @@ CPUinfo::CPUinfo()
 
 /*CPUinfo::~CPUinfo()
 {
-
+ncpus
+QVector cpuatual
 }
 */
 
@@ -51,20 +52,27 @@ bool CPUinfo::abrirArquivo(){
 void CPUinfo::run(){
     QStringList fileLines, lineData;
     while (true){
+        int i = 0;
         for (int j = 0; j < 2; j++){
             if (abrirArquivo()){
                 fileLines = fileInfo.split("\n");
-                for (int i = 0; i < numCPU; i++){
+                //for (int i = 0; i < numCPU; i++){
                     lineData = fileLines[i+1].split(QRegExp("\\s+"));
                     delta1[i] = lineData[1].toDouble() - delta1[i];
                     delta2[i] = lineData[2].toDouble() - delta2[i];
                     delta3[i] = lineData[3].toDouble() - delta3[i];
                     delta4[i] = lineData[4].toDouble() - delta4[i];
-                }
+
+                //}
             }
             sleep(1);
         }
-        setPercent();
+     /*   std::cout << delta1[i] << std::endl;
+        std::cout << delta2[i] << std::endl;
+        std::cout << delta3[i] << std::endl;
+        std::cout << delta4[i] << std::endl;
+   */     setPercent();
+        //std::cout << std::endl << percents[i] << std::endl;
         emit(update(percents));
     }
 }

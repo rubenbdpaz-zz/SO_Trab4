@@ -31,12 +31,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     x.resize(60);
     for (int i = 60, j = 0; i > 0; i--, j++)
-        x[j] = i;
+        x[j] = j;
 
     //GRÁFICO DA CPU
-    ui->cpuGraph->yAxis->setRange(0, 100);
-    ui->cpuGraph->yAxis->setAutoTickStep(false);
-    ui->cpuGraph->yAxis->setTickStep(50);
+
+    setCPUgraph();
     threadCPU = new CPUinfo();
     threadCPU->start();
 
@@ -163,20 +162,36 @@ void MainWindow::updateProcesses(QHash<QString, QString> newHash){
 
 }
 
+void MainWindow::setCPUgraph(){
+    int nCPU = threadCPU->getNumCPUS();
+    cpuData.resize(nCPU);
+    for(int i = 0; i < nCPU; i++){
+        cpuData[i].resize(60);
+        cpuData[i].fill(0);
+    }
+    ui->cpuGraph->yAxis->setRange(0, 100);
+    ui->cpuGraph->yAxis->setAutoTickStep(false);
+    ui->cpuGraph->yAxis->setTickStep(50);
+    ui->cpuGraph->xAxis->setRange(0, 60);
+    ui->cpuGraph->xAxis->setTickStep(15);
+}
+
 void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
-/*    QString currentCPU, name = "CPU ";
+    QString currentCPU, name = "CPU ";
     double value;
+    int i = 0;
     for (int i = 0; i < threadCPU->getNumCPUS(); i++){
         //std::cout <<"value: " << value << std::endl;
         for (int pos = 0; pos < 59; ++pos){
-            value = cpuData[pos+1];
-            cpuData.replace(pos, value);
+            value = cpuData[i][pos+1];
+            cpuData[i].replace(pos, value);
         }
-        cpuData[59] = percent[i];
+        cpuData[i][59] = percent[i];
+        std::cout << cpuData[i][59] << std::endl;
         ui->cpuGraph->addGraph();
-        currentCPU.setNum(i);
-        name += currentCPU;
-        ui->cpuGraph->graph(i)->setName(name);
+        //currentCPU.setNum(i+1);
+        //name += currentCPU;
+        //ui->cpuGraph->graph(i)->setName(name);
 
         //ESCOLHENDO A COR
         switch (i){
@@ -208,7 +223,9 @@ void MainWindow::updateCPU(QVector<double> percent){  //VETOR DE CPUS?!?!
             ui->cpuGraph->graph(i)->setPen(QPen(Qt::darkRed));
             break;
         }
-    }*/
+        ui->cpuGraph->graph(i)->setData(x, cpuData[i]);
+        ui->cpuGraph->replot();
+    }
 }
 
 void MainWindow::on_pushButton_clicked()
