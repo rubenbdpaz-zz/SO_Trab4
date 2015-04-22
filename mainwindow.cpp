@@ -63,11 +63,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //ABA INFORMAÇÕES DO SISTEMA
 
     //ICONE
-    QPixmap icone("pinguim.jpg");
-    ui->iconeSistema->setFixedWidth(64);
-    ui->iconeSistema->setFixedHeight(64);
+    QPixmap icone("/usr/share/icons/default/pinguim.jpg");
     ui->iconeSistema->setPixmap(icone);
-    //ui->iconeSistema->show();
 
     //NOME DO COMPUTADOR
     QFile file("/proc/sys/kernel/hostname");

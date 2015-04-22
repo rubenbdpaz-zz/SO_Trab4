@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="abaProcList">
      <attribute name="title">
@@ -60,12 +60,12 @@
       <property name="title">
        <string>CPU Info</string>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>151</width>
+         <width>152</width>
          <height>151</height>
         </rect>
        </property>
@@ -191,8 +191,8 @@
        <rect>
         <x>8</x>
         <y>60</y>
-        <width>121</width>
-        <height>51</height>
+        <width>101</width>
+        <height>101</height>
        </rect>
       </property>
       <property name="text">
@@ -333,7 +333,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>27</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
