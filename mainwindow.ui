@@ -14,7 +14,7 @@
    <string>System Monitor</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(113, 113, 113);</string>
+   <string notr="true">background-color:  white;</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -27,12 +27,25 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: white;</string>
+     <string notr="true">background-color: white;
+</string>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
+    </property>
+    <property name="elideMode">
+     <enum>Qt::ElideNone</enum>
     </property>
     <widget class="QWidget" name="abaProcList">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <attribute name="title">
       <string>Lista de Processos</string>
      </attribute>
@@ -225,6 +238,11 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QLabel" name="NomePC">
+         <property name="font">
+          <font>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
          <property name="text">
           <string>Nome do Computador</string>
          </property>
