@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->atualizarDial->hide();
+    ui->label_2->hide();
 
     //ui->pushButton->hide();
     //ABA PROCESSOS
@@ -33,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
     //connect(ui->atualizarDial, SIGNAL(valueChanged(int)), timer, SLOT(start(int)));
-    timer->setInterval(30000);
+    timer->setInterval(60000);
     timer->start();
 
     //ABA DESEMPENHO
@@ -297,6 +299,7 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
+
 void MainWindow::TimerSlot(){
     model->clear();
     QStringList headers;
@@ -318,4 +321,13 @@ void MainWindow::on_atualizarDial_valueChanged(int value)
 void MainWindow::on_tableView_activated(const QModelIndex &index)
 {
     ui->pushButton->show();
+}
+
+void MainWindow::on_atualizar_clicked()
+{
+    model->clear();
+    QStringList headers;
+    headers << tr("Nome") << tr("Status") << tr("PID") << tr("PPID") << tr("Usuário") << tr("Threads") << tr("Trocas de Contexto");
+    model->setHorizontalHeaderLabels(headers);
+    procs->run();
 }

@@ -38,6 +38,8 @@ private slots:
 
     void on_tableView_activated(const QModelIndex &index);
 
+    void on_atualizar_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;

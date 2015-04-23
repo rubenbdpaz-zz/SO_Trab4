@@ -10,6 +10,12 @@
     <height>504</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>848</width>
+    <height>504</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>System Monitor</string>
   </property>
@@ -23,11 +29,103 @@
       <x>20</x>
       <y>30</y>
       <width>811</width>
-      <height>341</height>
+      <height>461</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: white;
+     <string notr="true">/*background-color: white;*/
+ QTabWidget::pane { /* The tab widget frame */
+     border-top: 2px solid #C2C7CB;
+ }
+
+ QTabWidget::tab-bar {
+     left: 5px; /* move to the right by 5px */
+ }
+
+ /* Style the tab using the tab sub-control. Note that
+     it reads QTabBar _not_ QTabWidget */
+ QTabBar::tab {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+     border: 2px solid #C4C4C3;
+     border-bottom-color: #C2C7CB; /* same as the pane color */
+     border-top-left-radius: 4px;
+     border-top-right-radius: 4px;
+     min-width: 8ex;
+     padding: 2px;
+ }
+
+ QTabBar::tab:selected, QTabBar::tab:hover {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                 stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+ }
+
+ QTabBar::tab:selected {
+     border-color: #9B9B9B;
+     border-bottom-color: #C2C7CB; /* same as pane color */
+ }
+
+ QTabBar::tab:!selected {
+     margin-top: 2px; /* make non-selected tabs look smaller */
+ }
+
+ QTabWidget::pane { /* The tab widget frame */
+     border-top: 2px solid #C2C7CB;
+ }
+
+ QTabWidget::tab-bar {
+     left: 5px; /* move to the right by 5px */
+ }
+
+ /* Style the tab using the tab sub-control. Note that
+     it reads QTabBar _not_ QTabWidget */
+ QTabBar::tab {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+     border: 2px solid #C4C4C3;
+     border-bottom-color: #C2C7CB; /* same as the pane color */
+     border-top-left-radius: 4px;
+     border-top-right-radius: 4px;
+     min-width: 8ex;
+     padding: 2px;
+ }
+
+ QTabBar::tab:selected, QTabBar::tab:hover {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                 stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+ }
+
+ QTabBar::tab:selected {
+     border-color: #9B9B9B;
+     border-bottom-color: #C2C7CB; /* same as pane color */
+ }
+
+ QTabBar::tab:!selected {
+     margin-top: 2px; /* make non-selected tabs look smaller */
+ }
+
+ /* make use of negative margins for overlapping tabs */
+ QTabBar::tab:selected {
+     /* expand/overlap to the left and right by 4px */
+     margin-left: -4px;
+     margin-right: -4px;
+ }
+
+ QTabBar::tab:first:selected {
+     margin-left: 0; /* the first selected tab has nothing to overlap with on the left */
+ }
+
+ QTabBar::tab:last:selected {
+     margin-right: 0; /* the last selected tab has nothing to overlap with on the right */
+ }
+
+ QTabBar::tab:only-one {
+     margin: 0; /* if there is only one tab, we don't want overlapping margins */
+ }
 </string>
     </property>
     <property name="tabPosition">
@@ -37,7 +135,7 @@
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="elideMode">
      <enum>Qt::ElideNone</enum>
@@ -62,30 +160,206 @@
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
      </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>320</y>
+        <width>311</width>
+        <height>33</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="atualizar">
+         <property name="styleSheet">
+          <string notr="true">/*background-color: #484848;*/
+
+ QPushButton {
+     border: 2px solid #8f8f91;
+     border-radius: 6px;
+     /*background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);*/
+	 color: white;
+     background-color: #484848;
+     min-width: 80px;
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:flat {
+    color: white;
+	border: none; /* no border for a flat push button */
+
+ }
+
+ QPushButton:default {
+     border-color: navy; /* make the default button prominent */
+ }
+</string>
+         </property>
+         <property name="text">
+          <string>Atualizar Lista</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton">
+         <property name="styleSheet">
+          <string notr="true">/*background-color: #484848;*/
+ QPushButton {
+     border: 2px solid #8f8f91;
+     border-radius: 6px;
+   /*  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde);*/
+		background-color: #484848;
+color: white;
+     min-width: 80px;
+ }
+
+ QPushButton:pressed {
+     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #dadbde, stop: 1 #f6f7fa);
+ }
+
+ QPushButton:flat {
+     border: none; /* no border for a flat push button */
+ }
+
+ QPushButton:default {
+     border-color: navy; /* make the default button prominent */
+ }
+</string>
+         </property>
+         <property name="text">
+          <string>Finalizar Processo</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>320</y>
+        <width>216</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLCDNumber" name="Nprocs">
+         <property name="styleSheet">
+          <string notr="true">background-color: #484848;
+</string>
+         </property>
+         <property name="intValue" stdset="0">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Número de processos</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>360</y>
+        <width>199</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLCDNumber" name="NThreads">
+         <property name="styleSheet">
+          <string notr="true">background-color: #484848;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Número de threads</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="abaDesemp">
      <attribute name="title">
       <string>Desempenho</string>
      </attribute>
-     <widget class="QGroupBox" name="groupBox_5">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>640</x>
+        <x>10</x>
         <y>20</y>
-        <width>161</width>
-        <height>201</height>
+        <width>781</width>
+        <height>271</height>
        </rect>
       </property>
-      <property name="title">
-       <string>CPU Info</string>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCustomPlot" name="cpuGraph" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(113, 113, 113);</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCustomPlot" name="memoryGraph" native="true">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(113, 113, 113);</string>
+         </property>
+         <zorder>groupBox_5</zorder>
+         <zorder>groupBox_5</zorder>
+         <zorder>groupBox_5</zorder>
+         <zorder>groupBox_5</zorder>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>320</y>
+        <width>461</width>
+        <height>81</height>
+       </rect>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="title">
+       <string>Cpu Info</string>
+      </property>
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>152</width>
-         <height>151</height>
+         <x>41</x>
+         <y>31</y>
+         <width>171</width>
+         <height>44</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -119,6 +393,18 @@
           </property>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>30</y>
+         <width>97</width>
+         <height>44</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
@@ -149,6 +435,18 @@
           </property>
          </widget>
         </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>30</y>
+         <width>81</width>
+         <height>44</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
@@ -182,32 +480,10 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>621</width>
-        <height>271</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCustomPlot" name="cpuGraph" native="true">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(113, 113, 113);</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCustomPlot" name="memoryGraph" native="true">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(113, 113, 113);</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>groupBox</zorder>
     </widget>
     <widget class="QWidget" name="abaSistema">
      <attribute name="title">
@@ -231,8 +507,8 @@
        <rect>
         <x>210</x>
         <y>80</y>
-        <width>565</width>
-        <height>111</height>
+        <width>622</width>
+        <height>161</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -240,7 +516,7 @@
         <widget class="QLabel" name="NomePC">
          <property name="font">
           <font>
-           <strikeout>false</strikeout>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -250,6 +526,11 @@
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="infoSO">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>Informações do SO (nome, kernel)</string>
          </property>
@@ -257,6 +538,11 @@
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="infoHW">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>Informações de Hardware (CPU, memória principal, memória secundária disponível)</string>
          </property>
@@ -265,49 +551,6 @@
       </layout>
      </widget>
     </widget>
-   </widget>
-   <widget class="QLCDNumber" name="Nprocs">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>383</y>
-      <width>64</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #484848;
-</string>
-    </property>
-    <property name="intValue" stdset="0">
-     <number>2</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>99</x>
-      <y>386</y>
-      <width>151</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Número de processos</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>390</y>
-      <width>151</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Finalizar Processo</string>
-    </property>
    </widget>
    <widget class="QDial" name="atualizarDial">
     <property name="geometry">
@@ -332,32 +575,19 @@
      <string>Atualização</string>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="NThreads">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>410</y>
-      <width>64</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #484848;</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_10">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>410</y>
-      <width>151</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Número de threads</string>
-    </property>
-   </widget>
+   <zorder>tabWidget</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>atualizarDial</zorder>
+   <zorder>label_2</zorder>
+   <zorder>atualizar</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>atualizar</zorder>
+   <zorder>label_3</zorder>
+   <zorder>usoCPU</zorder>
+   <zorder>label_4</zorder>
+   <zorder>ocioso</zorder>
+   <zorder>uptime</zorder>
+   <zorder>label_5</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
