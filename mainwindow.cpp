@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //ui->pushButton->hide();
     //ABA PROCESSOS
     model = new QStandardItemModel();
     QStringList headers;
@@ -32,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(TimerSlot()));
     //connect(ui->atualizarDial, SIGNAL(valueChanged(int)), timer, SLOT(start(int)));
-    timer->setInterval(5000);
+    timer->setInterval(30000);
     timer->start();
 
     //ABA DESEMPENHO
@@ -273,9 +274,27 @@ void MainWindow::updateCPU(double percent, double uso, double ocioso, double boo
 
 void MainWindow::on_pushButton_clicked()
 {
-    //listaitem. (....) ?
-    //ui->tableView->selectRow(); (???)
-    //ver help do QtableView
+    QString pid, command("kill -9 ");
+    //QModelIndex index;
+    //QTableWidgetItem item;
+    int row, code;
+
+    row = ui->tableView->selectionModel()->currentIndex().row();
+    //std::cout << row << std::endl;
+    if (row == -1){
+        QMessageBox::information(this, tr("Erro"), tr("Por favor, tente novamente"));
+    }
+    else{
+        pid = ui->tableView->model()->data(ui->tableView->model()->index(row, 2)).toString();
+        //std::cout << pid.toStdString() << std::endl;
+        command += pid;
+        code = system(qPrintable(command));
+        if (code == 0)
+            QMessageBox::information(this, tr("Erro"), tr("Processo finalizado com sucesso"));
+        else
+            QMessageBox::information(this, tr("Erro"), tr("Erro ao finalizar o processo"));
+        procs->run();
+    }
 }
 
 void MainWindow::TimerSlot(){
@@ -294,4 +313,9 @@ void MainWindow::on_atualizarDial_valueChanged(int value)
 
     //timer->setInterval(value*1000);
     //timer->start();
+}
+
+void MainWindow::on_tableView_activated(const QModelIndex &index)
+{
+    ui->pushButton->show();
 }

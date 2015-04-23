@@ -85,3 +85,8 @@ int Processos::getNumProcessos(){
 int Processos::getNumThreads(){
     return numThreads;
 }
+
+/*int Processos::finalizarProcesso(QString pid){
+    kill(pid, SIGKILL);
+}
+*/

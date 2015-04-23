@@ -36,6 +36,8 @@ private slots:
 
     void on_atualizarDial_valueChanged(int value);
 
+    void on_tableView_activated(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel *model;
